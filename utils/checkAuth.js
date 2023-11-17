@@ -13,12 +13,12 @@ export default (req, res, next) => {
       //возвращает что-то, без этого в родительской функции дальше не пойдет
       next();
     } catch (error) {
-      return req.status(403).json({
+      return res.status(403).json({
         message: "Нет доступа",
       });
     }
   } else {
-    return req.status(403).json({
+    return res.status(403).json({
       message: "Нет доступа",
     });
   }

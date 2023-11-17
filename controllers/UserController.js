@@ -8,12 +8,6 @@ import User from "../models/User.js";
 
 export const register = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    //если есть ошибки, возвращается 400
-    if (!errors.isEmpty()) {
-      return res.status(400).json(errors.array());
-    }
-
     //пароль шифруем
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);

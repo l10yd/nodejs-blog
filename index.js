@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-
+import cors from "cors";
 import mongoose from "mongoose";
 
 import {
@@ -38,6 +38,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(express.json());
+//это чтобы с localhost на localhost делать запросы
+app.use(cors());
 //если приходит запрос на uploads, проверяем, есть ли в папке uploads нужный файл
 app.use("/uploads", express.static("uploads"));
 
@@ -73,6 +75,9 @@ app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
     url: `/uploads/${req.file.originalname}`,
   });
 });
+
+//получить теги
+app.get("/tags", PostController.getLastTags);
 
 //роуты для запросов на статьи
 //получить все статьи

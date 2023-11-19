@@ -49,7 +49,9 @@ export const getOne = async (req, res) => {
       {
         new: true, // to return the updated document
       }
-    );
+    )
+      //добавляем данные пользователя
+      .populate("user");
 
     if (!updatedPost) {
       return res.status(404).json({
@@ -117,7 +119,7 @@ export const getLastTags = async (req, res) => {
     //берет последние 5 тегов
     const posts = await PostModel.find().limit(5).exec();
 
-    const tags = posts.map((obj) => obj.tags.flat().slice(0, 5));
+    const tags = [...new Set(posts.map((obj) => obj.tags).flat())].slice(0, 5);
 
     res.json(tags);
   } catch (error) {

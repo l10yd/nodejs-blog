@@ -34,6 +34,7 @@ export const getAll = async (req, res) => {
   }
 };
 
+//запрос при открытии полной статьи
 export const getOne = async (req, res) => {
   try {
     const postId = req.params.id;
@@ -45,6 +46,41 @@ export const getOne = async (req, res) => {
       },
       {
         $inc: { viewsCount: 1 },
+      },
+      {
+        new: true, // to return the updated document
+      }
+    )
+      //добавляем данные пользователя
+      .populate("user");
+
+    if (!updatedPost) {
+      return res.status(404).json({
+        message: "Статья не найдена",
+      });
+    }
+
+    res.json(updatedPost);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Не удалось получить статью",
+    });
+  }
+};
+
+//обновляет только счетчик комментариев
+export const updateComments = async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    // Ищем статью, обновляем счетчик просмотров и возвращаем ее
+    const updatedPost = await PostModel.findOneAndUpdate(
+      {
+        _id: postId,
+      },
+      {
+        $inc: { commentsCount: 1 },
       },
       {
         new: true, // to return the updated document

@@ -97,6 +97,8 @@ app.post(
 );
 //получить определенную статью
 app.get("/posts/:id", PostController.getOne);
+//увеличить счетчик комментариев статьи на 1
+app.get("/posts/:id/comments", PostController.updateComments);
 //удалить статью
 app.delete("/posts/:id", checkAuth, PostController.remove);
 //обновить статью
@@ -111,6 +113,8 @@ app.patch(
 //роуты для комментариев
 //получить все комментарии к выбранной статье
 app.get("/comments/:postId", CommentController.getAll);
+//получить последние 5 добавленных в бд комментариев
+app.get("/comments", CommentController.getLast);
 //создать новый комментарий
 app.post(
   "/comments",
@@ -120,7 +124,7 @@ app.post(
   CommentController.create
 );
 //удалить комментарий
-app.delete("/comments/:id", checkAuth, PostController.remove);
+//app.delete("/comments/:id", checkAuth, PostController.remove);
 
 //при запуске сервера
 app.listen(4444, (err) => {

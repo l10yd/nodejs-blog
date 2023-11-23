@@ -7,10 +7,15 @@ import {
   registerValidation,
   loginValidation,
   postCreateValidation,
+  commentCreateValidation,
 } from "./validations/validation.js";
 
 //содержат основные функции-обработчики запросов
-import { UserController, PostController } from "./controllers/index.js";
+import {
+  UserController,
+  PostController,
+  CommentController,
+} from "./controllers/index.js";
 //доп функции для работы с запросами
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 
@@ -102,6 +107,20 @@ app.patch(
   handleValidationErrors,
   PostController.update
 );
+
+//роуты для комментариев
+//получить все комментарии к выбранной статье
+app.get("/comments/:postId", CommentController.getAll);
+//создать новый комментарий
+app.post(
+  "/comments",
+  checkAuth,
+  commentCreateValidation,
+  handleValidationErrors,
+  CommentController.create
+);
+//удалить комментарий
+app.delete("/comments/:id", checkAuth, PostController.remove);
 
 //при запуске сервера
 app.listen(4444, (err) => {
